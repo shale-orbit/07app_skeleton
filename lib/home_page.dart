@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'widgets/category_tile.dart';
+import 'list_args.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -13,10 +16,14 @@ class _HomePageState extends State<HomePage> {
   String? _filter; // 从列表页 pop 回来的筛选条件
 
   Future<void> _openList(String category) async {
-    final result = await Navigator.pushNamed(context, '/list', arguments: category);
+    final result = await Navigator.pushNamed(
+      context,
+      '/list',
+      arguments: ListArgs(category: category, onlyHigh: _filter == '仅看高借阅量'),
+    );
     if (!mounted) return;
     if (result is String) {
-      setState(() => _filter = result); // 回传值生效
+      setState(() => _filter = result);
     }
   }
 
@@ -26,11 +33,11 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('图书分类'),
         // 副标题：显示回传值
-        actions:[
+        actions: [
           IconButton(
-            tooltip:'关于',
+            tooltip: '关于',
             icon: const Icon(Icons.info_outline),
-            onPressed:() => Navigator.pushNamed(context,'/about'),
+            onPressed: () => Navigator.pushNamed(context, '/about'),
           ),
         ],
         bottom: PreferredSize(
@@ -53,7 +60,7 @@ class _HomePageState extends State<HomePage> {
         childAspectRatio: 1.8,
         children: [
           for (final c in _categories)
-            CategoryTile(label:c, onTap: () => _openList(c)),
+            CategoryTile(label: c, onTap: () => _openList(c)),
         ],
       ),
     );

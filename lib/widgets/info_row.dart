@@ -18,8 +18,10 @@ class InfoRow extends StatelessWidget {
             child: Text(label, style: const TextStyle(color: Colors.black54)),
           ),
           Expanded(
-            child: Text(value,
-                style: const TextStyle(fontWeight: FontWeight.w500)),
+            child: Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
           ),
         ],
       ),

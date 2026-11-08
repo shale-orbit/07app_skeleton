@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'widgets/book_tile.dart';
+
 import 'book.dart';
+import 'list_args.dart';
+import 'widgets/book_tile.dart';
 
 class BookListPage extends StatefulWidget {
   const BookListPage({super.key});
@@ -41,12 +43,15 @@ class _BookListPageState extends State<BookListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 首页传进来的分类名；没传就是 null
-    final category = ModalRoute.of(context)?.settings.arguments as String?;
+    // 首页传进来的参数：分类 + 是否只看高借阅量
+    final args = ModalRoute.of(context)?.settings.arguments;
+    final listArgs = args is ListArgs ? args : const ListArgs();
+    final category = listArgs.category;
+    final onlyHigh = listArgs.onlyHigh;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(category == null ? '图书列表' : '图书列表 · $category'),
+        title: Text(['图书列表', ?category, if (onlyHigh) '借阅≥50'].join(' · ')),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -61,18 +66,23 @@ class _BookListPageState extends State<BookListPage> {
                 return Center(child: Text('加载失败：${snapshot.error}'));
               }
 
-              final all = snapshot.data!;
-              // 按分类过滤；没传分类就显示全部
-              final matched = category == null
-                  ? all
-                  : all.where((b) => b.category == category).toList();
+              final matched = snapshot.data!.where((b) {
+                if (category != null && b.category != category) return false;
+                if (onlyHigh && b.borrowCount < 50) return false;
+                return true;
+              }).toList();
+
+              if (matched.isEmpty) {
+                return const Center(child: Text('没有符合条件的图书'));
+              }
+
               final books = matched.take(20).toList();
 
               return ListView.builder(
                 itemCount: books.length,
                 itemBuilder: (context, i) {
                   final b = books[i];
-                                    return BookTile(
+                  return BookTile(
                     book: b,
                     index: i,
                     onTap: () async {

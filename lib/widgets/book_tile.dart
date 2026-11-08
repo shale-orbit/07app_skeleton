@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../book.dart';
 
 class BookTile extends StatelessWidget {
@@ -26,9 +27,12 @@ class BookTile extends StatelessWidget {
       ),
       title: Text(book.title),
       subtitle: Text(
-          '${book.category} · ${book.author} · 借阅 ${book.borrowCount} 次'),
-      trailing: Text('${book.rating}★',
-          style: const TextStyle(color: Colors.orange)),
+        '${book.category} · ${book.author} · 借阅 ${book.borrowCount} 次',
+      ),
+      trailing: Text(
+        '${book.rating}★',
+        style: const TextStyle(color: Colors.orange),
+      ),
     );
   }
 }
