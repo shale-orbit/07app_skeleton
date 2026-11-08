@@ -15,7 +15,7 @@ class _HomePageState extends State<HomePage> {
 
   String? _filter; // 从列表页 pop 回来的筛选条件
 
-  Future<void> _openList(String category) async {
+  Future<void> _openList(String? category) async {
     final result = await Navigator.pushNamed(
       context,
       '/list',
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
         crossAxisSpacing: 12,
         childAspectRatio: 1.8,
         children: [
+          CategoryTile(label:'全部',onTap:() => _openList(null)),
           for (final c in _categories)
             CategoryTile(label: c, onTap: () => _openList(c)),
         ],

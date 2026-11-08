@@ -13,7 +13,8 @@ class BookListPage extends StatefulWidget {
 
 class _BookListPageState extends State<BookListPage> {
   late final Future<List<Book>> _future = loadBooks();
-
+  static const _pageSize = 20;
+  int _visible = _pageSize; // 当前已加载条数
   /// 长按列表项：底部弹层 → 选择结果 pop 回首页
   Future<void> _showFilterSheet() async {
     final choice = await showModalBottomSheet<String>(
@@ -76,26 +77,59 @@ class _BookListPageState extends State<BookListPage> {
                 return const Center(child: Text('没有符合条件的图书'));
               }
 
-              final books = matched.take(20).toList();
+                           final books = matched.take(_visible).toList();
+              final hasMore = matched.length > _visible;
 
-              return ListView.builder(
-                itemCount: books.length,
-                itemBuilder: (context, i) {
-                  final b = books[i];
-                  return BookTile(
-                    book: b,
-                    index: i,
-                    onTap: () async {
-                      final result = await Navigator.pushNamed(
-                        context,
-                        '/detail',
-                        arguments: b,
-                      );
-                      debugPrint('详情页 pop 的返回值：$result');
-                    },
-                    onLongPress: _showFilterSheet,
-                  );
-                },
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: books.length,
+                      itemBuilder: (context, i) {
+                        final b = books[i];
+                        return BookTile(
+                          book: b,
+                          index: i,
+                          onTap: () async {
+                            final result = await Navigator.pushNamed(
+                              context,
+                              '/detail',
+                              arguments: b,
+                            );
+                            debugPrint('详情页 pop 的返回值：$result');
+                          },
+                          onLongPress: _showFilterSheet,
+                        );
+                      },
+                    ),
+                  ),
+                  if (hasMore)
+                    SafeArea(
+                      top: false,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () =>
+                                setState(() => _visible += _pageSize),
+                            child: Text(
+                              '加载更多（还有 ${matched.length - _visible} 条）',
+                            ),
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    const Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Text(
+                        '已全部加载',
+                        style:
+                            TextStyle(color: Colors.black38, fontSize: 12),
+                      ),
+                    ),
+                ],
               );
             },
           ),
