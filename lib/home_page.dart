@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'widgets/category_tile.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -46,17 +46,7 @@ class _HomePageState extends State<HomePage> {
         childAspectRatio: 1.8,
         children: [
           for (final c in _categories)
-            Card(
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: () => _openList(c),
-                child: Center(
-                  child: Text(c,
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w600)),
-                ),
-              ),
-            ),
+            CategoryTile(label:c, onTap: () => _openList(c)),
         ],
       ),
     );

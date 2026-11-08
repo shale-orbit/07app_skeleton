@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/book_tile.dart';
 import 'book.dart';
 
 class BookListPage extends StatefulWidget {
@@ -71,7 +72,9 @@ class _BookListPageState extends State<BookListPage> {
                 itemCount: books.length,
                 itemBuilder: (context, i) {
                   final b = books[i];
-                  return ListTile(
+                                    return BookTile(
+                    book: b,
+                    index: i,
                     onTap: () async {
                       final result = await Navigator.pushNamed(
                         context,
@@ -80,17 +83,7 @@ class _BookListPageState extends State<BookListPage> {
                       );
                       debugPrint('详情页 pop 的返回值：$result');
                     },
-                    onLongPress: _showFilterSheet, // 长按弹层
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          Colors.primaries[i % Colors.primaries.length],
-                      child: Text('${i + 1}'),
-                    ),
-                    title: Text(b.title),
-                    subtitle: Text(
-                        '${b.category} · ${b.author} · 借阅 ${b.borrowCount} 次'),
-                    trailing: Text('${b.rating}★',
-                        style: const TextStyle(color: Colors.orange)),
+                    onLongPress: _showFilterSheet,
                   );
                 },
               );

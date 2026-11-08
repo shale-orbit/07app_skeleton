@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/info_row.dart';
 import 'book.dart';
 
 class BookDetailPage extends StatelessWidget {
@@ -22,13 +23,13 @@ class BookDetailPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          _row('编号', book.id),
-          _row('书名', book.title),
-          _row('分类', book.category),
-          _row('作者', book.author),
-          _row('评分', '${book.rating} ★'),
-          _row('借阅次数', '${book.borrowCount} 次'),
-          _row('入馆月份', book.month),
+          InfoRow('编号', book.id),
+          InfoRow('书名', book.title),
+          InfoRow('分类', book.category),
+          InfoRow('作者', book.author),
+          InfoRow('评分', '${book.rating} ★'),
+          InfoRow('借阅次数', '${book.borrowCount} 次'),
+          InfoRow('入馆月份', book.month),
           const SizedBox(height: 24),
           ElevatedButton.icon(
             // pop 不带第二个参数 = 返回 null
@@ -40,21 +41,4 @@ class BookDetailPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget _row(String label, String value) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 90,
-              child: Text(label, style: const TextStyle(color: Colors.black54)),
-            ),
-            Expanded(
-              child: Text(value,
-                  style: const TextStyle(fontWeight: FontWeight.w500)),
-            ),
-          ],
-        ),
-      );
 }
