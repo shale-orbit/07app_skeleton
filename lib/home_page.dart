@@ -26,6 +26,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text('图书分类'),
         // 副标题：显示回传值
+        actions:[
+          IconButton(
+            tooltip:'关于',
+            icon: const Icon(Icons.info_outline),
+            onPressed:() => Navigator.pushNamed(context,'/about'),
+          ),
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(24),
           child: Container(
