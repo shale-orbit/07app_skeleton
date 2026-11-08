@@ -34,6 +34,14 @@ class _BookListPageState extends State<BookListPage> {
                 itemBuilder: (context, i) {
                   final b = books[i];
                   return ListTile(
+                    onTap:()async{
+                      final result = await Navigator.pushNamed(
+                        context,
+                        '/detail',
+                        arguments: b, // 整个 Book 实例塞进 arguments，不是 id
+                      );
+                      debugPrint('详情页 pop 的返回值：$result'); // 步骤二应为 null
+                    },
                     leading: CircleAvatar(
                       backgroundColor: Colors.primaries[i % Colors.primaries.length],
                       child: Text('${i + 1}'),
